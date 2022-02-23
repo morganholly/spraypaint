@@ -67,3 +67,61 @@ type
         g*: int8
         b*: int8
         o*: int8
+
+
+
+converter addOpacity(val: LABFloat): OLABFloat {.inline.} =
+    OLABFloat(l: val.l, a: val.a, b: val.b, o: 1)
+
+converter addOpacity(val: LCHFloat): OLCHFloat {.inline.} =
+    OLCHFloat(l: val.l, c: val.c, h: val.h, o: 1)
+
+converter addOpacity(val: RGBLinearFloat): ORGBLinearFloat {.inline.} =
+    ORGBLinearFloat(r: val.r, g: val.g, b: val.b, o: 1)
+
+converter addOpacity(val: RGBLinearInt8): ORGBLinearInt8 {.inline.} =
+    ORGBLinearInt8(r: val.r, g: val.g, b: val.b, o: 1)
+
+converter addOpacity(val: RGBNonLinearFloat): ORGBNonLinearFloat {.inline.} =
+    ORGBNonLinearFloat(r: val.r, g: val.g, b: val.b, o: 1)
+
+converter addOpacity(val: RGBNonLinearInt8): ORGBNonLinearInt8 {.inline.} =
+    ORGBNonLinearInt8(r: val.r, g: val.g, b: val.b, o: 1)
+
+
+proc addOpacity(val: LABFloat, opacity: float): OLABFloat {.inline.} =
+    OLABFloat(l: val.l, a: val.a, b: val.b, o: opacity)
+
+proc addOpacity(val: LCHFloat, opacity: float): OLCHFloat {.inline.} =
+    OLCHFloat(l: val.l, c: val.c, h: val.h, o: opacity)
+
+proc addOpacity(val: RGBLinearFloat, opacity: float): ORGBLinearFloat {.inline.} =
+    ORGBLinearFloat(r: val.r, g: val.g, b: val.b, o: opacity)
+
+proc addOpacity(val: RGBLinearInt8, opacity: int8): ORGBLinearInt8 {.inline.} =
+    ORGBLinearInt8(r: val.r, g: val.g, b: val.b, o: opacity)
+
+proc addOpacity(val: RGBNonLinearFloat, opacity: float): ORGBNonLinearFloat {.inline.} =
+    ORGBNonLinearFloat(r: val.r, g: val.g, b: val.b, o: opacity)
+
+proc addOpacity(val: RGBNonLinearInt8, opacity: int8): ORGBNonLinearInt8 {.inline.} =
+    ORGBNonLinearInt8(r: val.r, g: val.g, b: val.b, o: opacity)
+
+
+proc delOpacity(val: OLABFloat): LABFloat {.inline.} =
+    LABFloat(l: val.l, a: val.a, b: val.b)
+
+proc delOpacity(val: OLCHFloat): LCHFloat {.inline.} =
+    LCHFloat(l: val.l, c: val.c, h: val.h)
+
+proc delOpacity(val: ORGBLinearFloat): RGBLinearFloat {.inline.} =
+    RGBLinearFloat(r: val.r, g: val.g, b: val.b)
+
+proc delOpacity(val: ORGBLinearInt8): RGBLinearInt8 {.inline.} =
+    RGBLinearInt8(r: val.r, g: val.g, b: val.b)
+
+proc delOpacity(val: ORGBNonLinearFloat): RGBNonLinearFloat {.inline.} =
+    RGBNonLinearFloat(r: val.r, g: val.g, b: val.b)
+
+proc delOpacity(val: ORGBNonLinearInt8): RGBNonLinearInt8 {.inline.} =
+    RGBNonLinearInt8(r: val.r, g: val.g, b: val.b)
