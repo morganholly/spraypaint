@@ -81,3 +81,61 @@ proc `-=` *(this: var Hue, other: float) =
 
 proc `+/=` *(this: var Hue, other: float): Hue =
     this.hue = hueAverage(this.hue, other)
+
+
+
+proc `>` *(this: Hue, other: Hue): bool =
+    this.hue > other.hue
+
+proc `>=` *(this: Hue, other: Hue): bool =
+    this.hue >= other.hue
+
+proc `==` *(this: Hue, other: Hue): bool =
+    abs(this.hue - other.hue) < 0.0000001
+
+proc `<=` *(this: Hue, other: Hue): bool =
+    this.hue <= other.hue
+
+proc `<` *(this: Hue, other: Hue): bool =
+    this.hue < other.hue
+
+proc `!=` *(this: Hue, other: Hue): bool =
+    abs(this.hue - other.hue) >= 0.0000001
+
+
+proc `>` *(this: Hue, other: float): bool =
+    this.hue > other
+
+proc `>=` *(this: Hue, other: float): bool =
+    this.hue >= other
+
+proc `==` *(this: Hue, other: float): bool =
+    abs(this.hue - other) < 0.0000001
+
+proc `<=` *(this: Hue, other: float): bool =
+    this.hue <= other
+
+proc `<` *(this: Hue, other: float): bool =
+    this.hue < other
+
+proc `!=` *(this: Hue, other: float): bool =
+    abs(this.hue - other) >= 0.0000001
+
+
+proc `>` *(this: float, other: Hue): bool =
+    this > other.hue
+
+proc `>=` *(this: float, other: Hue): bool =
+    this >= other.hue
+
+proc `==` *(this: float, other: Hue): bool =
+    abs(this - other.hue) < 0.0000001
+
+proc `<=` *(this: float, other: Hue): bool =
+    this <= other.hue
+
+proc `<` *(this: float, other: Hue): bool =
+    this < other.hue
+
+proc `!=` *(this: float, other: Hue): bool =
+    abs(this - other.hue) >= 0.0000001
