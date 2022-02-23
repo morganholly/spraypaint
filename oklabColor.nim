@@ -1,6 +1,10 @@
 import hue
 import std/math
 
+const inv2_4 = 1.0 / 2.4
+const inv1_055 = 1.0 / 1.055
+const inv12_92 = 1.0 / 12.92
+
 type
     LABFloat* = object
         l*: float
@@ -157,7 +161,7 @@ proc nonlin(val: float): float {.inline.} =
     if val < 0.0031308:
         result = 12.92 * val
     else:
-        result = 1.055 * pow(val, 1.0 / 2.4) - 0.055
+        result = 1.055 * pow(val, inv2_4) - 0.055
 
 proc nonlin(val: RGBLinearFloat): RGBNonLinearFloat {.inline.} =
     RGBNonLinearFloat(r: nonlin(val.r), g: nonlin(val.g), b: nonlin(val.b))
@@ -174,9 +178,9 @@ proc nonlin(r: float, g: float, b: float, o: float): ORGBNonLinearFloat {.inline
 
 proc lin(val: float): float {.inline.} =
     if val < 0.04045:
-        result = val / 12.92
+        result = val * inv12_92
     else:
-        result = pow((val + 0.055) / (1.055), 2.4)
+        result = pow((val + 0.055) * inv1_055, 2.4)
 
 proc lin(val: RGBNonLinearFloat): RGBLinearFloat {.inline.} =
     RGBLinearFloat(r: lin(val.r), g: lin(val.g), b: lin(val.b))
