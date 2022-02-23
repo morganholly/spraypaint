@@ -125,3 +125,29 @@ proc delOpacity(val: ORGBNonLinearFloat): RGBNonLinearFloat {.inline.} =
 
 proc delOpacity(val: ORGBNonLinearInt8): RGBNonLinearInt8 {.inline.} =
     RGBNonLinearInt8(r: val.r, g: val.g, b: val.b)
+
+
+proc cyl(val: LABFloat): LCHFloat {.inline.} =
+    LCHFloat(l: val.l, c: sqrt(val.a * val.a + val.b * val.b), h: Hue(hue: arctan2(val.b, val.a)))
+
+proc cyl(val: OLABFloat): OLCHFloat {.inline.} =
+    OLCHFloat(l: val.l, c: sqrt(val.a * val.a + val.b * val.b), h: Hue(hue: arctan2(val.b, val.a)), o: val.o)
+
+proc LABtoLCH(val: LABFloat): LCHFloat {.inline.} =
+    LCHFloat(l: val.l, c: sqrt(val.a * val.a + val.b * val.b), h: Hue(hue: arctan2(val.b, val.a)))
+
+proc LABtoLCH(val: OLABFloat): OLCHFloat {.inline.} =
+    OLCHFloat(l: val.l, c: sqrt(val.a * val.a + val.b * val.b), h: Hue(hue: arctan2(val.b, val.a)), o: val.o)
+
+
+proc cart(val: LCHFloat): LABFloat {.inline.} =
+    LABFloat(l: val.l, a: val.c * cos(val.h.hue), b: val.c * sin(val.h.hue))
+
+proc cart(val: OLCHFloat): OLABFloat {.inline.} =
+    OLABFloat(l: val.l, a: val.c * cos(val.h.hue), b: val.c * sin(val.h.hue), o: val.o)
+
+proc LCHtoLAB(val: LCHFloat): LABFloat {.inline.} =
+    LABFloat(l: val.l, a: val.c * cos(val.h.hue), b: val.c * sin(val.h.hue))
+
+proc LCHtoLAB(val: OLCHFloat): OLABFloat {.inline.} =
+    OLABFloat(l: val.l, a: val.c * cos(val.h.hue), b: val.c * sin(val.h.hue), o: val.o)
