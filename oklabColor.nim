@@ -151,3 +151,41 @@ proc LCHtoLAB(val: LCHFloat): LABFloat {.inline.} =
 
 proc LCHtoLAB(val: OLCHFloat): OLABFloat {.inline.} =
     OLABFloat(l: val.l, a: val.c * cos(val.h.hue), b: val.c * sin(val.h.hue), o: val.o)
+
+
+proc nonlin(val: float): float {.inline.} =
+    if val < 0.0031308:
+        result = 12.92 * val
+    else:
+        result = 1.055 * pow(val, 1.0 / 2.4) - 0.055
+
+proc nonlin(val: RGBLinearFloat): RGBNonLinearFloat {.inline.} =
+    RGBNonLinearFloat(r: nonlin(val.r), g: nonlin(val.g), b: nonlin(val.b))
+
+proc nonlin(val: ORGBLinearFloat): ORGBNonLinearFloat {.inline.} =
+    ORGBNonLinearFloat(r: nonlin(val.r), g: nonlin(val.g), b: nonlin(val.b), o: val.o)
+
+proc nonlin(r: float, g: float, b: float): RGBNonLinearFloat {.inline.} =
+    RGBNonLinearFloat(r: nonlin(r), g: nonlin(g), b: nonlin(b))
+
+proc nonlin(r: float, g: float, b: float, o: float): ORGBNonLinearFloat {.inline.} =
+    ORGBNonLinearFloat(r: nonlin(r), g: nonlin(g), b: nonlin(b), o: o)
+
+
+proc lin(val: float): float {.inline.} =
+    if val < 0.04045:
+        result = val / 12.92
+    else:
+        result = pow((val + 0.055) / (1.055), 2.4)
+
+proc lin(val: RGBNonLinearFloat): RGBLinearFloat {.inline.} =
+    RGBLinearFloat(r: lin(val.r), g: lin(val.g), b: lin(val.b))
+
+proc lin(val: ORGBNonLinearFloat): ORGBLinearFloat {.inline.} =
+    ORGBLinearFloat(r: lin(val.r), g: lin(val.g), b: lin(val.b), o: val.o)
+
+proc lin(r: float, g: float, b: float): RGBLinearFloat {.inline.} =
+    RGBLinearFloat(r: lin(r), g: lin(g), b: lin(b))
+
+proc lin(r: float, g: float, b: float, o: float): ORGBLinearFloat {.inline.} =
+    ORGBLinearFloat(r: lin(r), g: lin(g), b: lin(b), o: o)
