@@ -193,3 +193,20 @@ proc lin(r: float, g: float, b: float): RGBLinearFloat {.inline.} =
 
 proc lin(r: float, g: float, b: float, o: float): ORGBLinearFloat {.inline.} =
     ORGBLinearFloat(r: lin(r), g: lin(g), b: lin(b), o: o)
+
+
+proc simpleClipToInt8(val: float): int8 =
+    int8(max(min(val, 1), 0))
+
+proc floatToIntClipEach(val: RGBLinearFloat): RGBLinearInt8 {.inline} =
+    RGBLinearInt8(r: simpleClipToInt8(val.r), g: simpleClipToInt8(val.g), b: simpleClipToInt8(val.b))
+
+proc floatToIntClipEach(val: ORGBLinearFloat): ORGBLinearInt8 {.inline} =
+    ORGBLinearInt8(r: simpleClipToInt8(val.r), g: simpleClipToInt8(val.g), b: simpleClipToInt8(val.b), o: simpleClipToInt8(val.o))
+
+proc floatToIntClipEach(val: RGBNonLinearFloat): RGBNonLinearInt8 {.inline} =
+    RGBNonLinearInt8(r: simpleClipToInt8(val.r), g: simpleClipToInt8(val.g), b: simpleClipToInt8(val.b))
+
+proc floatToIntClipEach(val: ORGBNonLinearFloat): ORGBNonLinearInt8 {.inline} =
+    ORGBNonLinearInt8(r: simpleClipToInt8(val.r), g: simpleClipToInt8(val.g), b: simpleClipToInt8(val.b), o: simpleClipToInt8(val.o))
+
