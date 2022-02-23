@@ -2,6 +2,7 @@ import hue
 import std/math
 
 const inv2_4 = 1.0 / 2.4
+const inv256 = 1.0 / 256.0
 const inv1_055 = 1.0 / 1.055
 const inv12_92 = 1.0 / 12.92
 
@@ -210,3 +211,18 @@ proc floatToIntClipEach(val: RGBNonLinearFloat): RGBNonLinearInt8 {.inline} =
 proc floatToIntClipEach(val: ORGBNonLinearFloat): ORGBNonLinearInt8 {.inline} =
     ORGBNonLinearInt8(r: simpleClipToInt8(val.r), g: simpleClipToInt8(val.g), b: simpleClipToInt8(val.b), o: simpleClipToInt8(val.o))
 
+
+proc int8ToFloat(val: int8): float =
+    float(val) * inv256
+
+proc intToFloatClipEach(val: RGBLinearInt8): RGBLinearFloat {.inline} =
+    RGBLinearFloat(r: int8ToFloat(val.r), g: int8ToFloat(val.g), b: int8ToFloat(val.b))
+
+proc intToFloatClipEach(val: ORGBLinearInt8): ORGBLinearFloat {.inline} =
+    ORGBLinearFloat(r: int8ToFloat(val.r), g: int8ToFloat(val.g), b: int8ToFloat(val.b), o: int8ToFloat(val.o))
+
+proc intToFloatClipEach(val: RGBNonLinearInt8): RGBNonLinearFloat {.inline} =
+    RGBNonLinearFloat(r: int8ToFloat(val.r), g: int8ToFloat(val.g), b: int8ToFloat(val.b))
+
+proc intToFloatClipEach(val: ORGBNonLinearInt8): ORGBNonLinearFloat {.inline} =
+    ORGBNonLinearFloat(r: int8ToFloat(val.r), g: int8ToFloat(val.g), b: int8ToFloat(val.b), o: int8ToFloat(val.o))
