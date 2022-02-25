@@ -228,7 +228,7 @@ proc intToFloatClipEach(val: ORGBNonLinearInt8): ORGBNonLinearFloat {.inline} =
     ORGBNonLinearFloat(r: int8ToFloat(val.r), g: int8ToFloat(val.g), b: int8ToFloat(val.b), o: int8ToFloat(val.o))
 
 
-proc linRGBToOklab(val: RGBLinearFloat): LABFloat {.inline.} =
+proc linRGBToOklab_sRGB_ref(val: RGBLinearFloat): LABFloat {.inline.} =
     let l = cbrt(0.4122214708'f64 * val.r + 0.5363325363'f64 * val.g + 0.0514459929'f64 * val.b)
     let m = cbrt(0.2119034982'f64 * val.r + 0.6806995451'f64 * val.g + 0.1073969566'f64 * val.b)
     let s = cbrt(0.0883024619'f64 * val.r + 0.2817188376'f64 * val.g + 0.6299787005'f64 * val.b)
@@ -239,7 +239,7 @@ proc linRGBToOklab(val: RGBLinearFloat): LABFloat {.inline.} =
         b: 0.0259040371'f64 * l + 0.7827717662'f64 * m - 0.8086757660'f64 * s
     )
 
-proc linRGBToOklab(val: ORGBLinearFloat): OLABFloat {.inline.} =
+proc linRGBToOklab_sRGB_ref(val: ORGBLinearFloat): OLABFloat {.inline.} =
     let l = cbrt(0.4122214708'f64 * val.r + 0.5363325363'f64 * val.g + 0.0514459929'f64 * val.b)
     let m = cbrt(0.2119034982'f64 * val.r + 0.6806995451'f64 * val.g + 0.1073969566'f64 * val.b)
     let s = cbrt(0.0883024619'f64 * val.r + 0.2817188376'f64 * val.g + 0.6299787005'f64 * val.b)
@@ -252,7 +252,7 @@ proc linRGBToOklab(val: ORGBLinearFloat): OLABFloat {.inline.} =
     )
 
 
-proc oklabToLinRGB(val: LABFloat): RGBLinearFloat =
+proc oklabToLinRGB_sRGB_ref(val: LABFloat): RGBLinearFloat =
     let l = val.l + 0.3963377774'f64 * val.a + 0.2158037573'f64 * val.b
     let m = val.l - 0.1055613458'f64 * val.a - 0.0638541728'f64 * val.b
     let s = val.l - 0.0894841775'f64 * val.a - 1.2914855480'f64 * val.b
@@ -262,12 +262,12 @@ proc oklabToLinRGB(val: LABFloat): RGBLinearFloat =
     let s_cubed = s * s * s
 
     result = RGBLinearFloat(
-        r: +4.0767416621'f64 * l_cubed - 3.3077115913'f64 * m_cubed + 0.2309699292'f64 * s_cubed,
+        r: 4.0767416621'f64 * l_cubed - 3.3077115913'f64 * m_cubed + 0.2309699292'f64 * s_cubed,
         g: -1.2684380046'f64 * l_cubed + 2.6097574011'f64 * m_cubed - 0.3413193965'f64 * s_cubed,
         b: -0.0041960863'f64 * l_cubed - 0.7034186147'f64 * m_cubed + 1.7076147010'f64 * s_cubed
     )
 
-proc oklabToLinRGB(val: OLABFloat): ORGBLinearFloat =
+proc oklabToLinRGB_sRGB_ref(val: OLABFloat): ORGBLinearFloat =
     let l = val.l + 0.3963377774'f64 * val.a + 0.2158037573'f64 * val.b
     let m = val.l - 0.1055613458'f64 * val.a - 0.0638541728'f64 * val.b
     let s = val.l - 0.0894841775'f64 * val.a - 1.2914855480'f64 * val.b
@@ -277,8 +277,64 @@ proc oklabToLinRGB(val: OLABFloat): ORGBLinearFloat =
     let s_cubed = s * s * s
 
     result = ORGBLinearFloat(
-        r: +4.0767416621'f64 * l_cubed - 3.3077115913'f64 * m_cubed + 0.2309699292'f64 * s_cubed,
+        r: 4.0767416621'f64 * l_cubed - 3.3077115913'f64 * m_cubed + 0.2309699292'f64 * s_cubed,
         g: -1.2684380046'f64 * l_cubed + 2.6097574011'f64 * m_cubed - 0.3413193965'f64 * s_cubed,
         b: -0.0041960863'f64 * l_cubed - 0.7034186147'f64 * m_cubed + 1.7076147010'f64 * s_cubed,
+        o: val.o
+    )
+
+
+proc linRGBToOklab_sRGB_svgeesus(val: RGBLinearFloat): LABFloat {.inline.} =
+    let l = cbrt(0.4121764591770371'f64 * val.r + 0.5362739742695891'f64 * val.g + 0.05144037229550143'f64 * val.b)
+    let m = cbrt(0.21190919958804857'f64 * val.r + 0.6807178709823131'f64 * val.g + 0.10739984387775398'f64 * val.b)
+    let s = cbrt(0.08834481407213204'f64 * val.r + 0.28185396309857735'f64 * val.g + 0.6302808688015096'f64 * val.b)
+
+    result = LABFloat(
+        l: 0.2104542553'f64 * l + 0.7936177850'f64 * m - 0.0040720468'f64 * s,
+        a: 1.9779984951'f64 * l - 2.4285922050'f64 * m + 0.4505937099'f64 * s,
+        b: 0.0259040371'f64 * l + 0.7827717662'f64 * m - 0.8086757660'f64 * s
+    )
+
+proc linRGBToOklab_sRGB_svgeesus(val: ORGBLinearFloat): OLABFloat {.inline.} =
+    let l = cbrt(0.4121764591770371'f64 * val.r + 0.5362739742695891'f64 * val.g + 0.05144037229550143'f64 * val.b)
+    let m = cbrt(0.21190919958804857'f64 * val.r + 0.6807178709823131'f64 * val.g + 0.10739984387775398'f64 * val.b)
+    let s = cbrt(0.08834481407213204'f64 * val.r + 0.28185396309857735'f64 * val.g + 0.6302808688015096'f64 * val.b)
+
+    result = OLABFloat(
+        l: 0.2104542553'f64 * l + 0.7936177850'f64 * m - 0.0040720468'f64 * s,
+        a: 1.9779984951'f64 * l - 2.4285922050'f64 * m + 0.4505937099'f64 * s,
+        b: 0.0259040371'f64 * l + 0.7827717662'f64 * m - 0.8086757660'f64 * s,
+        o: val.o
+    )
+
+
+proc oklabToLinRGB_sRGB_svgeesus(val: LABFloat): RGBLinearFloat =
+    let l = val.l + 0.3963377774'f64 * val.a + 0.2158037573'f64 * val.b
+    let m = val.l - 0.1055613458'f64 * val.a - 0.0638541728'f64 * val.b
+    let s = val.l - 0.0894841775'f64 * val.a - 1.2914855480'f64 * val.b
+
+    let l_cubed = l * l * l
+    let m_cubed = m * m * m
+    let s_cubed = s * s * s
+
+    result = RGBLinearFloat(
+        r: 4.0771868237173135444'f64 * l_cubed - 3.3076225216643627309'f64 * m_cubed + 0.23085919548795198229'f64 * s_cubed,
+        g: -1.2685764914005098651'f64 * l_cubed + 2.6096871144850084836'f64 * m_cubed - 0.34115574866072784699'f64 * s_cubed,
+        b: -0.0041965422316564007124'f64 * l_cubed - 0.70339967610102697313'f64 * m_cubed + 1.706796033865412852'f64 * s_cubed
+    )
+
+proc oklabToLinRGB_sRGB_svgeesus(val: OLABFloat): ORGBLinearFloat =
+    let l = val.l + 0.3963377774'f64 * val.a + 0.2158037573'f64 * val.b
+    let m = val.l - 0.1055613458'f64 * val.a - 0.0638541728'f64 * val.b
+    let s = val.l - 0.0894841775'f64 * val.a - 1.2914855480'f64 * val.b
+
+    let l_cubed = l * l * l
+    let m_cubed = m * m * m
+    let s_cubed = s * s * s
+
+    result = RGBLinearFloat(
+        r: 4.0771868237173135444'f64 * l_cubed - 3.3076225216643627309'f64 * m_cubed + 0.23085919548795198229'f64 * s_cubed,
+        g: -1.2685764914005098651'f64 * l_cubed + 2.6096871144850084836'f64 * m_cubed - 0.34115574866072784699'f64 * s_cubed,
+        b: -0.0041965422316564007124'f64 * l_cubed - 0.70339967610102697313'f64 * m_cubed + 1.706796033865412852'f64 * s_cubed,
         o: val.o
     )
