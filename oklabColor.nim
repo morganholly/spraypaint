@@ -332,7 +332,7 @@ proc oklabToLinRGB_sRGB_svgeesus(val: OLABFloat): ORGBLinearFloat =
     let m_cubed = m * m * m
     let s_cubed = s * s * s
 
-    result = RGBLinearFloat(
+    result = ORGBLinearFloat(
         r: 4.0771868237173135444'f64 * l_cubed - 3.3076225216643627309'f64 * m_cubed + 0.23085919548795198229'f64 * s_cubed,
         g: -1.2685764914005098651'f64 * l_cubed + 2.6096871144850084836'f64 * m_cubed - 0.34115574866072784699'f64 * s_cubed,
         b: -0.0041965422316564007124'f64 * l_cubed - 0.70339967610102697313'f64 * m_cubed + 1.706796033865412852'f64 * s_cubed,
