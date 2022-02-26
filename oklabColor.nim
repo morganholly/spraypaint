@@ -75,160 +75,161 @@ type
 
 
 
-converter addOpacity(val: LABFloat): OLABFloat {.inline.} =
+
+converter addOpacity *(val: LABFloat): OLABFloat {.inline.} =
     OLABFloat(l: val.l, a: val.a, b: val.b, o: 1)
 
-converter addOpacity(val: LCHFloat): OLCHFloat {.inline.} =
+converter addOpacity *(val: LCHFloat): OLCHFloat {.inline.} =
     OLCHFloat(l: val.l, c: val.c, h: val.h, o: 1)
 
-converter addOpacity(val: RGBLinearFloat): ORGBLinearFloat {.inline.} =
+converter addOpacity *(val: RGBLinearFloat): ORGBLinearFloat {.inline.} =
     ORGBLinearFloat(r: val.r, g: val.g, b: val.b, o: 1)
 
-converter addOpacity(val: RGBLinearInt8): ORGBLinearInt8 {.inline.} =
+converter addOpacity *(val: RGBLinearInt8): ORGBLinearInt8 {.inline.} =
     ORGBLinearInt8(r: val.r, g: val.g, b: val.b, o: 1)
 
-converter addOpacity(val: RGBNonLinearFloat): ORGBNonLinearFloat {.inline.} =
+converter addOpacity *(val: RGBNonLinearFloat): ORGBNonLinearFloat {.inline.} =
     ORGBNonLinearFloat(r: val.r, g: val.g, b: val.b, o: 1)
 
-converter addOpacity(val: RGBNonLinearInt8): ORGBNonLinearInt8 {.inline.} =
+converter addOpacity *(val: RGBNonLinearInt8): ORGBNonLinearInt8 {.inline.} =
     ORGBNonLinearInt8(r: val.r, g: val.g, b: val.b, o: 1)
 
 
-proc addOpacity(val: LABFloat, opacity: float): OLABFloat {.inline.} =
+proc addOpacity *(val: LABFloat, opacity: float): OLABFloat {.inline.} =
     OLABFloat(l: val.l, a: val.a, b: val.b, o: opacity)
 
-proc addOpacity(val: LCHFloat, opacity: float): OLCHFloat {.inline.} =
+proc addOpacity *(val: LCHFloat, opacity: float): OLCHFloat {.inline.} =
     OLCHFloat(l: val.l, c: val.c, h: val.h, o: opacity)
 
-proc addOpacity(val: RGBLinearFloat, opacity: float): ORGBLinearFloat {.inline.} =
+proc addOpacity *(val: RGBLinearFloat, opacity: float): ORGBLinearFloat {.inline.} =
     ORGBLinearFloat(r: val.r, g: val.g, b: val.b, o: opacity)
 
-proc addOpacity(val: RGBLinearInt8, opacity: int8): ORGBLinearInt8 {.inline.} =
+proc addOpacity *(val: RGBLinearInt8, opacity: int8): ORGBLinearInt8 {.inline.} =
     ORGBLinearInt8(r: val.r, g: val.g, b: val.b, o: opacity)
 
-proc addOpacity(val: RGBNonLinearFloat, opacity: float): ORGBNonLinearFloat {.inline.} =
+proc addOpacity *(val: RGBNonLinearFloat, opacity: float): ORGBNonLinearFloat {.inline.} =
     ORGBNonLinearFloat(r: val.r, g: val.g, b: val.b, o: opacity)
 
-proc addOpacity(val: RGBNonLinearInt8, opacity: int8): ORGBNonLinearInt8 {.inline.} =
+proc addOpacity *(val: RGBNonLinearInt8, opacity: int8): ORGBNonLinearInt8 {.inline.} =
     ORGBNonLinearInt8(r: val.r, g: val.g, b: val.b, o: opacity)
 
 
-proc delOpacity(val: OLABFloat): LABFloat {.inline.} =
+proc delOpacity *(val: OLABFloat): LABFloat {.inline.} =
     LABFloat(l: val.l, a: val.a, b: val.b)
 
-proc delOpacity(val: OLCHFloat): LCHFloat {.inline.} =
+proc delOpacity *(val: OLCHFloat): LCHFloat {.inline.} =
     LCHFloat(l: val.l, c: val.c, h: val.h)
 
-proc delOpacity(val: ORGBLinearFloat): RGBLinearFloat {.inline.} =
+proc delOpacity *(val: ORGBLinearFloat): RGBLinearFloat {.inline.} =
     RGBLinearFloat(r: val.r, g: val.g, b: val.b)
 
-proc delOpacity(val: ORGBLinearInt8): RGBLinearInt8 {.inline.} =
+proc delOpacity *(val: ORGBLinearInt8): RGBLinearInt8 {.inline.} =
     RGBLinearInt8(r: val.r, g: val.g, b: val.b)
 
-proc delOpacity(val: ORGBNonLinearFloat): RGBNonLinearFloat {.inline.} =
+proc delOpacity *(val: ORGBNonLinearFloat): RGBNonLinearFloat {.inline.} =
     RGBNonLinearFloat(r: val.r, g: val.g, b: val.b)
 
-proc delOpacity(val: ORGBNonLinearInt8): RGBNonLinearInt8 {.inline.} =
+proc delOpacity *(val: ORGBNonLinearInt8): RGBNonLinearInt8 {.inline.} =
     RGBNonLinearInt8(r: val.r, g: val.g, b: val.b)
 
 
-proc cyl(val: LABFloat): LCHFloat {.inline.} =
+proc cyl *(val: LABFloat): LCHFloat {.inline.} =
     LCHFloat(l: val.l, c: sqrt(val.a * val.a + val.b * val.b), h: Hue(hue: arctan2(val.b, val.a)))
 
-proc cyl(val: OLABFloat): OLCHFloat {.inline.} =
+proc cyl *(val: OLABFloat): OLCHFloat {.inline.} =
     OLCHFloat(l: val.l, c: sqrt(val.a * val.a + val.b * val.b), h: Hue(hue: arctan2(val.b, val.a)), o: val.o)
 
-proc LABtoLCH(val: LABFloat): LCHFloat {.inline.} =
+proc LABtoLCH *(val: LABFloat): LCHFloat {.inline.} =
     LCHFloat(l: val.l, c: sqrt(val.a * val.a + val.b * val.b), h: Hue(hue: arctan2(val.b, val.a)))
 
-proc LABtoLCH(val: OLABFloat): OLCHFloat {.inline.} =
+proc LABtoLCH *(val: OLABFloat): OLCHFloat {.inline.} =
     OLCHFloat(l: val.l, c: sqrt(val.a * val.a + val.b * val.b), h: Hue(hue: arctan2(val.b, val.a)), o: val.o)
 
 
-proc cart(val: LCHFloat): LABFloat {.inline.} =
+proc cart *(val: LCHFloat): LABFloat {.inline.} =
     LABFloat(l: val.l, a: val.c * cos(val.h.hue), b: val.c * sin(val.h.hue))
 
-proc cart(val: OLCHFloat): OLABFloat {.inline.} =
+proc cart *(val: OLCHFloat): OLABFloat {.inline.} =
     OLABFloat(l: val.l, a: val.c * cos(val.h.hue), b: val.c * sin(val.h.hue), o: val.o)
 
-proc LCHtoLAB(val: LCHFloat): LABFloat {.inline.} =
+proc LCHtoLAB *(val: LCHFloat): LABFloat {.inline.} =
     LABFloat(l: val.l, a: val.c * cos(val.h.hue), b: val.c * sin(val.h.hue))
 
-proc LCHtoLAB(val: OLCHFloat): OLABFloat {.inline.} =
+proc LCHtoLAB *(val: OLCHFloat): OLABFloat {.inline.} =
     OLABFloat(l: val.l, a: val.c * cos(val.h.hue), b: val.c * sin(val.h.hue), o: val.o)
 
 
-proc nonlin(val: float): float {.inline.} =
+proc nonlin *(val: float): float {.inline.} =
     if val < 0.0031308:
         result = 12.92 * val
     else:
         result = 1.055 * pow(val, inv2_4) - 0.055
 
-proc nonlin(val: RGBLinearFloat): RGBNonLinearFloat {.inline.} =
+proc nonlin *(val: RGBLinearFloat): RGBNonLinearFloat {.inline.} =
     RGBNonLinearFloat(r: nonlin(val.r), g: nonlin(val.g), b: nonlin(val.b))
 
-proc nonlin(val: ORGBLinearFloat): ORGBNonLinearFloat {.inline.} =
+proc nonlin *(val: ORGBLinearFloat): ORGBNonLinearFloat {.inline.} =
     ORGBNonLinearFloat(r: nonlin(val.r), g: nonlin(val.g), b: nonlin(val.b), o: val.o)
 
-proc nonlin(r: float, g: float, b: float): RGBNonLinearFloat {.inline.} =
+proc nonlin *(r: float, g: float, b: float): RGBNonLinearFloat {.inline.} =
     RGBNonLinearFloat(r: nonlin(r), g: nonlin(g), b: nonlin(b))
 
-proc nonlin(r: float, g: float, b: float, o: float): ORGBNonLinearFloat {.inline.} =
+proc nonlin *(r: float, g: float, b: float, o: float): ORGBNonLinearFloat {.inline.} =
     ORGBNonLinearFloat(r: nonlin(r), g: nonlin(g), b: nonlin(b), o: o)
 
 
-proc lin(val: float): float {.inline.} =
+proc lin *(val: float): float {.inline.} =
     if val < 0.04045:
         result = val * inv12_92
     else:
         result = pow((val + 0.055) * inv1_055, 2.4)
 
-proc lin(val: RGBNonLinearFloat): RGBLinearFloat {.inline.} =
+proc lin *(val: RGBNonLinearFloat): RGBLinearFloat {.inline.} =
     RGBLinearFloat(r: lin(val.r), g: lin(val.g), b: lin(val.b))
 
-proc lin(val: ORGBNonLinearFloat): ORGBLinearFloat {.inline.} =
+proc lin *(val: ORGBNonLinearFloat): ORGBLinearFloat {.inline.} =
     ORGBLinearFloat(r: lin(val.r), g: lin(val.g), b: lin(val.b), o: val.o)
 
-proc lin(r: float, g: float, b: float): RGBLinearFloat {.inline.} =
+proc lin *(r: float, g: float, b: float): RGBLinearFloat {.inline.} =
     RGBLinearFloat(r: lin(r), g: lin(g), b: lin(b))
 
-proc lin(r: float, g: float, b: float, o: float): ORGBLinearFloat {.inline.} =
+proc lin *(r: float, g: float, b: float, o: float): ORGBLinearFloat {.inline.} =
     ORGBLinearFloat(r: lin(r), g: lin(g), b: lin(b), o: o)
 
 
-proc simpleClipToInt8(val: float): int8 =
+proc simpleClipToInt8 *(val: float): int8 =
     int8(max(min(val, 1), 0))
 
-proc floatToIntClipEach(val: RGBLinearFloat): RGBLinearInt8 {.inline} =
+proc floatToIntClipEach *(val: RGBLinearFloat): RGBLinearInt8 {.inline} =
     RGBLinearInt8(r: simpleClipToInt8(val.r), g: simpleClipToInt8(val.g), b: simpleClipToInt8(val.b))
 
-proc floatToIntClipEach(val: ORGBLinearFloat): ORGBLinearInt8 {.inline} =
+proc floatToIntClipEach *(val: ORGBLinearFloat): ORGBLinearInt8 {.inline} =
     ORGBLinearInt8(r: simpleClipToInt8(val.r), g: simpleClipToInt8(val.g), b: simpleClipToInt8(val.b), o: simpleClipToInt8(val.o))
 
-proc floatToIntClipEach(val: RGBNonLinearFloat): RGBNonLinearInt8 {.inline} =
+proc floatToIntClipEach *(val: RGBNonLinearFloat): RGBNonLinearInt8 {.inline} =
     RGBNonLinearInt8(r: simpleClipToInt8(val.r), g: simpleClipToInt8(val.g), b: simpleClipToInt8(val.b))
 
-proc floatToIntClipEach(val: ORGBNonLinearFloat): ORGBNonLinearInt8 {.inline} =
+proc floatToIntClipEach *(val: ORGBNonLinearFloat): ORGBNonLinearInt8 {.inline} =
     ORGBNonLinearInt8(r: simpleClipToInt8(val.r), g: simpleClipToInt8(val.g), b: simpleClipToInt8(val.b), o: simpleClipToInt8(val.o))
 
 
-proc int8ToFloat(val: int8): float =
+proc int8ToFloat *(val: int8): float =
     float(val) * inv256
 
-proc intToFloatClipEach(val: RGBLinearInt8): RGBLinearFloat {.inline} =
+proc intToFloatClipEach *(val: RGBLinearInt8): RGBLinearFloat {.inline} =
     RGBLinearFloat(r: int8ToFloat(val.r), g: int8ToFloat(val.g), b: int8ToFloat(val.b))
 
-proc intToFloatClipEach(val: ORGBLinearInt8): ORGBLinearFloat {.inline} =
+proc intToFloatClipEach *(val: ORGBLinearInt8): ORGBLinearFloat {.inline} =
     ORGBLinearFloat(r: int8ToFloat(val.r), g: int8ToFloat(val.g), b: int8ToFloat(val.b), o: int8ToFloat(val.o))
 
-proc intToFloatClipEach(val: RGBNonLinearInt8): RGBNonLinearFloat {.inline} =
+proc intToFloatClipEach *(val: RGBNonLinearInt8): RGBNonLinearFloat {.inline} =
     RGBNonLinearFloat(r: int8ToFloat(val.r), g: int8ToFloat(val.g), b: int8ToFloat(val.b))
 
-proc intToFloatClipEach(val: ORGBNonLinearInt8): ORGBNonLinearFloat {.inline} =
+proc intToFloatClipEach *(val: ORGBNonLinearInt8): ORGBNonLinearFloat {.inline} =
     ORGBNonLinearFloat(r: int8ToFloat(val.r), g: int8ToFloat(val.g), b: int8ToFloat(val.b), o: int8ToFloat(val.o))
 
 
-proc linRGBToOklab_sRGB_ref(val: RGBLinearFloat): LABFloat {.inline.} =
+proc linRGBToOklab_sRGB_ref *(val: RGBLinearFloat): LABFloat {.inline.} =
     let l = cbrt(0.4122214708'f64 * val.r + 0.5363325363'f64 * val.g + 0.0514459929'f64 * val.b)
     let m = cbrt(0.2119034982'f64 * val.r + 0.6806995451'f64 * val.g + 0.1073969566'f64 * val.b)
     let s = cbrt(0.0883024619'f64 * val.r + 0.2817188376'f64 * val.g + 0.6299787005'f64 * val.b)
@@ -239,7 +240,7 @@ proc linRGBToOklab_sRGB_ref(val: RGBLinearFloat): LABFloat {.inline.} =
         b: 0.0259040371'f64 * l + 0.7827717662'f64 * m - 0.8086757660'f64 * s
     )
 
-proc linRGBToOklab_sRGB_ref(val: ORGBLinearFloat): OLABFloat {.inline.} =
+proc linRGBToOklab_sRGB_ref *(val: ORGBLinearFloat): OLABFloat {.inline.} =
     let l = cbrt(0.4122214708'f64 * val.r + 0.5363325363'f64 * val.g + 0.0514459929'f64 * val.b)
     let m = cbrt(0.2119034982'f64 * val.r + 0.6806995451'f64 * val.g + 0.1073969566'f64 * val.b)
     let s = cbrt(0.0883024619'f64 * val.r + 0.2817188376'f64 * val.g + 0.6299787005'f64 * val.b)
@@ -252,7 +253,7 @@ proc linRGBToOklab_sRGB_ref(val: ORGBLinearFloat): OLABFloat {.inline.} =
     )
 
 
-proc oklabToLinRGB_sRGB_ref(val: LABFloat): RGBLinearFloat =
+proc oklabToLinRGB_sRGB_ref *(val: LABFloat): RGBLinearFloat =
     let l = val.l + 0.3963377774'f64 * val.a + 0.2158037573'f64 * val.b
     let m = val.l - 0.1055613458'f64 * val.a - 0.0638541728'f64 * val.b
     let s = val.l - 0.0894841775'f64 * val.a - 1.2914855480'f64 * val.b
@@ -267,7 +268,7 @@ proc oklabToLinRGB_sRGB_ref(val: LABFloat): RGBLinearFloat =
         b: -0.0041960863'f64 * l_cubed - 0.7034186147'f64 * m_cubed + 1.7076147010'f64 * s_cubed
     )
 
-proc oklabToLinRGB_sRGB_ref(val: OLABFloat): ORGBLinearFloat =
+proc oklabToLinRGB_sRGB_ref *(val: OLABFloat): ORGBLinearFloat =
     let l = val.l + 0.3963377774'f64 * val.a + 0.2158037573'f64 * val.b
     let m = val.l - 0.1055613458'f64 * val.a - 0.0638541728'f64 * val.b
     let s = val.l - 0.0894841775'f64 * val.a - 1.2914855480'f64 * val.b
@@ -284,7 +285,7 @@ proc oklabToLinRGB_sRGB_ref(val: OLABFloat): ORGBLinearFloat =
     )
 
 
-proc linRGBToOklab_sRGB_svgeesus(val: RGBLinearFloat): LABFloat {.inline.} =
+proc linRGBToOklab_sRGB_svgeesus *(val: RGBLinearFloat): LABFloat {.inline.} =
     let l = cbrt(0.4121764591770371'f64 * val.r + 0.5362739742695891'f64 * val.g + 0.05144037229550143'f64 * val.b)
     let m = cbrt(0.21190919958804857'f64 * val.r + 0.6807178709823131'f64 * val.g + 0.10739984387775398'f64 * val.b)
     let s = cbrt(0.08834481407213204'f64 * val.r + 0.28185396309857735'f64 * val.g + 0.6302808688015096'f64 * val.b)
@@ -295,7 +296,7 @@ proc linRGBToOklab_sRGB_svgeesus(val: RGBLinearFloat): LABFloat {.inline.} =
         b: 0.0259040371'f64 * l + 0.7827717662'f64 * m - 0.8086757660'f64 * s
     )
 
-proc linRGBToOklab_sRGB_svgeesus(val: ORGBLinearFloat): OLABFloat {.inline.} =
+proc linRGBToOklab_sRGB_svgeesus *(val: ORGBLinearFloat): OLABFloat {.inline.} =
     let l = cbrt(0.4121764591770371'f64 * val.r + 0.5362739742695891'f64 * val.g + 0.05144037229550143'f64 * val.b)
     let m = cbrt(0.21190919958804857'f64 * val.r + 0.6807178709823131'f64 * val.g + 0.10739984387775398'f64 * val.b)
     let s = cbrt(0.08834481407213204'f64 * val.r + 0.28185396309857735'f64 * val.g + 0.6302808688015096'f64 * val.b)
@@ -308,7 +309,7 @@ proc linRGBToOklab_sRGB_svgeesus(val: ORGBLinearFloat): OLABFloat {.inline.} =
     )
 
 
-proc oklabToLinRGB_sRGB_svgeesus(val: LABFloat): RGBLinearFloat =
+proc oklabToLinRGB_sRGB_svgeesus *(val: LABFloat): RGBLinearFloat =
     let l = val.l + 0.3963377774'f64 * val.a + 0.2158037573'f64 * val.b
     let m = val.l - 0.1055613458'f64 * val.a - 0.0638541728'f64 * val.b
     let s = val.l - 0.0894841775'f64 * val.a - 1.2914855480'f64 * val.b
@@ -323,7 +324,7 @@ proc oklabToLinRGB_sRGB_svgeesus(val: LABFloat): RGBLinearFloat =
         b: -0.0041965422316564007124'f64 * l_cubed - 0.70339967610102697313'f64 * m_cubed + 1.706796033865412852'f64 * s_cubed
     )
 
-proc oklabToLinRGB_sRGB_svgeesus(val: OLABFloat): ORGBLinearFloat =
+proc oklabToLinRGB_sRGB_svgeesus *(val: OLABFloat): ORGBLinearFloat =
     let l = val.l + 0.3963377774'f64 * val.a + 0.2158037573'f64 * val.b
     let m = val.l - 0.1055613458'f64 * val.a - 0.0638541728'f64 * val.b
     let s = val.l - 0.0894841775'f64 * val.a - 1.2914855480'f64 * val.b
