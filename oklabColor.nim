@@ -73,7 +73,38 @@ type
         b*: int8
         o*: int8
 
+    IndexRGB* = enum
+        red, green, blue
 
+    IndexLMS* = enum
+        l, m, s
+
+    OklabConversionMatrix* = object # rgb then xyz
+        toLMS*: array[IndexLMS.l .. IndexLMS.s, array[IndexRGB.red .. IndexRGB.blue, float64]]
+        fromLMS*: array[IndexRGB.red .. IndexRGB.blue, array[IndexLMS.l .. IndexLMS.s, float64]]
+
+
+let convMatrix_ref = OklabConversionMatrix(
+toLMS: [
+    [0.4122214708'f64,               0.5363325363'f64,               0.0514459929'f64],
+    [0.2119034982'f64,               0.6806995451'f64,               0.1073969566'f64],
+    [0.0883024619'f64,               0.2817188376'f64,               0.6299787005'f64]],
+fromLMS: [
+    [ 4.0767416621'f64,             -3.3077115913'f64,               0.2309699292'f64],
+    [-1.2684380046'f64,              2.6097574011'f64,              -0.3413193965'f64],
+    [-0.0041960863'f64,             -0.7034186147'f64,               1.7076147010'f64]]
+)
+
+let convMatrix_svgeesus = OklabConversionMatrix(
+toLMS: [
+    [0.4121764591770371'f64,         0.5362739742695891'f64,         0.05144037229550143'f64],
+    [0.21190919958804857'f64,        0.6807178709823131'f64,         0.10739984387775398'f64],
+    [0.08834481407213204'f64,        0.28185396309857735'f64,        0.6302808688015096'f64]],
+fromLMS: [
+    [ 4.0771868237173135444'f64,    -3.3076225216643627309'f64,      0.23085919548795198229'f64],
+    [-1.2685764914005098651'f64,     2.6096871144850084836'f64,     -0.34115574866072784699'f64],
+    [-0.0041965422316564007124'f64, -0.70339967610102697313'f64,     1.706796033865412852'f64]]
+)
 
 
 converter addOpacity *(val: LABFloat): OLABFloat {.inline.} =
@@ -337,5 +368,61 @@ proc oklabToLinRGB_sRGB_svgeesus *(val: OLABFloat): ORGBLinearFloat =
         r: 4.0771868237173135444'f64 * l_cubed - 3.3076225216643627309'f64 * m_cubed + 0.23085919548795198229'f64 * s_cubed,
         g: -1.2685764914005098651'f64 * l_cubed + 2.6096871144850084836'f64 * m_cubed - 0.34115574866072784699'f64 * s_cubed,
         b: -0.0041965422316564007124'f64 * l_cubed - 0.70339967610102697313'f64 * m_cubed + 1.706796033865412852'f64 * s_cubed,
+        o: val.o
+    )
+
+
+proc linRGBToOklab_variable *(val: RGBLinearFloat, matrix: OklabConversionMatrix): LABFloat {.inline.} =
+    let l = cbrt(matrix.toLMS[IndexLMS.l][red] * val.r + matrix.toLMS[IndexLMS.l][green] * val.g + matrix.toLMS[IndexLMS.l][blue] * val.b)
+    let m = cbrt(matrix.toLMS[IndexLMS.m][red] * val.r + matrix.toLMS[IndexLMS.m][green] * val.g + matrix.toLMS[IndexLMS.m][blue] * val.b)
+    let s = cbrt(matrix.toLMS[IndexLMS.s][red] * val.r + matrix.toLMS[IndexLMS.s][green] * val.g + matrix.toLMS[IndexLMS.s][blue] * val.b)
+
+    result = LABFloat(
+        l: 0.2104542553'f64 * l + 0.7936177850'f64 * m - 0.0040720468'f64 * s,
+        a: 1.9779984951'f64 * l - 2.4285922050'f64 * m + 0.4505937099'f64 * s,
+        b: 0.0259040371'f64 * l + 0.7827717662'f64 * m - 0.8086757660'f64 * s
+    )
+
+proc linRGBToOklab_variable *(val: ORGBLinearFloat, matrix: OklabConversionMatrix): OLABFloat {.inline.} =
+    let l = cbrt(matrix.toLMS[IndexLMS.l][red] * val.r + matrix.toLMS[IndexLMS.l][green] * val.g + matrix.toLMS[IndexLMS.l][blue] * val.b)
+    let m = cbrt(matrix.toLMS[IndexLMS.m][red] * val.r + matrix.toLMS[IndexLMS.m][green] * val.g + matrix.toLMS[IndexLMS.m][blue] * val.b)
+    let s = cbrt(matrix.toLMS[IndexLMS.s][red] * val.r + matrix.toLMS[IndexLMS.s][green] * val.g + matrix.toLMS[IndexLMS.s][blue] * val.b)
+
+    result = OLABFloat(
+        l: 0.2104542553'f64 * l + 0.7936177850'f64 * m - 0.0040720468'f64 * s,
+        a: 1.9779984951'f64 * l - 2.4285922050'f64 * m + 0.4505937099'f64 * s,
+        b: 0.0259040371'f64 * l + 0.7827717662'f64 * m - 0.8086757660'f64 * s,
+        o: val.o
+    )
+
+
+proc oklabToLinRGB_variable *(val: LABFloat, matrix: OklabConversionMatrix): RGBLinearFloat =
+    let l = val.l + 0.3963377774'f64 * val.a + 0.2158037573'f64 * val.b
+    let m = val.l - 0.1055613458'f64 * val.a - 0.0638541728'f64 * val.b
+    let s = val.l - 0.0894841775'f64 * val.a - 1.2914855480'f64 * val.b
+
+    let l_cubed = l * l * l
+    let m_cubed = m * m * m
+    let s_cubed = s * s * s
+
+    result = RGBLinearFloat(
+        r: matrix.fromLMS[red][IndexLMS.l] * l_cubed + matrix.fromLMS[red][IndexLMS.m] * m_cubed + matrix.fromLMS[red][IndexLMS.s] * s_cubed,
+        g: matrix.fromLMS[green][IndexLMS.l] * l_cubed + matrix.fromLMS[green][IndexLMS.m] * m_cubed + matrix.fromLMS[green][IndexLMS.s] * s_cubed,
+        b: matrix.fromLMS[blue][IndexLMS.l] * l_cubed + matrix.fromLMS[blue][IndexLMS.m] * m_cubed + matrix.fromLMS[blue][IndexLMS.s] * s_cubed
+    )
+
+proc oklabToLinRGB_variable *(val: OLABFloat, matrix: OklabConversionMatrix): ORGBLinearFloat =
+    let l = val.l + 0.3963377774'f64 * val.a + 0.2158037573'f64 * val.b
+    let m = val.l - 0.1055613458'f64 * val.a - 0.0638541728'f64 * val.b
+    let s = val.l - 0.0894841775'f64 * val.a - 1.2914855480'f64 * val.b
+
+    let l_cubed = l * l * l
+    let m_cubed = m * m * m
+    let s_cubed = s * s * s
+
+    result = ORGBLinearFloat(
+        r: matrix.fromLMS[red][IndexLMS.l] * l_cubed + matrix.fromLMS[red][IndexLMS.m] * m_cubed + matrix.fromLMS[red][IndexLMS.s] * s_cubed,
+        g: matrix.fromLMS[green][IndexLMS.l] * l_cubed + matrix.fromLMS[green][IndexLMS.m] * m_cubed + matrix.fromLMS[green][IndexLMS.s] * s_cubed,
+        b: matrix.fromLMS[blue][IndexLMS.l] * l_cubed + matrix.fromLMS[blue][IndexLMS.m] * m_cubed + matrix.fromLMS[blue][IndexLMS.s] * s_cubed,
         o: val.o
     )
