@@ -6,29 +6,30 @@ type
 
 
 
-proc hueAverage *(a: float, b: float): float =
+proc hueAverage *(a: range[0'f64 .. 360'f64], b: range[0'f64 .. 360'f64]): range[0'f64 .. 360'f64] =
     if a < b:
-        if abs(b - a) <= abs(b - (a + 360)):
-            return ((b + a) / 2) mod 360
+        if (b - a) <= abs(b - (a + 360)):
+            result = ((b + a) / 2) mod 360
         else:
-            return ((b + (a + 360)) / 2) mod 360
+            result = ((b + a + 360) / 2) mod 360
     else:
         if abs(a - b) <= abs(a - (b + 360)):
-            return ((a + b) / 2) mod 360
+            result = ((a + b) / 2) mod 360
         else:
-            return ((a + (b + 360)) / 2) mod 360
+            result = ((a + b + 360) / 2) mod 360
 
-proc hueAverage *(a: float, b: float, wb: float): float =
+proc hueAverage *(a: range[0'f64 .. 360'f64], b: range[0'f64 .. 360'f64], wb: range[0'f64 .. 1'f64]): range[0'f64 .. 360'f64] =
+    let invWB = 1 - wb
     if a < b:
-        if abs(b - a) <= abs(b - (a + 360)):
-            return ((b * 2 * wb + a * 2 * (1 - wb)) / 2) mod 360;
+        if (b - a) <= abs(b - (a + 360)):
+            result = (b * wb + a * invWB) mod 360
         else:
-            return ((b * 2 * wb + (a + 360) * 2 * (1 - wb)) / 2) mod 360;
+            result = (b * wb + (a + 360) * invWB) mod 360
     else:
-        if abs(a - b) <= abs(a - (b + 360)):
-            return ((a * 2 * (1 - wb) + b * 2 * wb) / 2) mod 360;
+        if (a - b) <= abs(a - (b + 360)):
+            result = (a * invWB + b * wb) mod 360
         else:
-            return ((a * 2 * (1 - wb) + (b + 360) * 2 * wb) / 2) mod 360;
+            result = (a * invWB + (b + 360) * wb) mod 360
 
 
 
